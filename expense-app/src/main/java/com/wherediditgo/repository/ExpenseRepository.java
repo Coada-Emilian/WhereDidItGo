@@ -17,6 +17,14 @@ public class ExpenseRepository {
         return expenses;
     }
 
+    // Find an expense by its ID (commented out)
+    // public Expense findById(int id) {
+    // return expenses.stream()
+    // .filter(expense -> expense.getId().equals(id))
+    // .findFirst()
+    // .orElse(null);
+    // }
+
     public void delete(Expense expense) {
         expenses.remove(expense);
     }
