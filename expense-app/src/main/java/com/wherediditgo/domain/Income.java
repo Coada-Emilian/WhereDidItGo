@@ -80,4 +80,16 @@ public class Income {
     this.incomeSource = incomeSource;
     this.account = account;
   }
+
+  public void assignId(Long id) {
+    if (this.id != null) {
+      throw new IllegalStateException("Income already has an ID");
+    }
+
+    if (id == null || id <= 0) {
+      throw new IllegalArgumentException("ID must be positive");
+    }
+
+    this.id = id;
+  }
 }
