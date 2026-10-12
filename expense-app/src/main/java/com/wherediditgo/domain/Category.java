@@ -19,14 +19,11 @@ public class Category {
     return name;
   }
 
-  /**
-   * @param name the name to set
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public Category(String name) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("Category name cannot be blank");
+    }
+
     this.name = name;
   }
 }
