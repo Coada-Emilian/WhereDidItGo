@@ -10,22 +10,30 @@ public class ExpenseRepository {
     private final List<Expense> expenses = new ArrayList<>();
 
     public void create(Expense expense) {
+        if (expense == null) {
+            throw new IllegalArgumentException("Expense cannot be null");
+        }
+
         expenses.add(expense);
     }
 
     public List<Expense> findAll() {
-        return expenses;
+        return new ArrayList<>(expenses);
     }
 
-    // Find an expense by its ID (commented out)
-    // public Expense findById(int id) {
-    // return expenses.stream()
-    // .filter(expense -> expense.getId().equals(id))
-    // .findFirst()
-    // .orElse(null);
-    // }
+    public Expense findById(Long id) {
+        return expenses.stream()
+                .filter(expense -> expense.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 
     public void delete(Expense expense) {
+        if (expense == null) {
+            throw new IllegalArgumentException("Expense cannot be null");
+        }
+
         expenses.remove(expense);
     }
+
 }
