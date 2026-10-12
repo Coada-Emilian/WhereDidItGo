@@ -54,6 +54,26 @@ public class Income {
   }
 
   public Income(BigDecimal amount, LocalDate date, String description, IncomeSource incomeSource, Account account) {
+    if (amount == null || amount.signum() <= 0) {
+      throw new IllegalArgumentException("Income amount must be positive");
+    }
+
+    if (date == null) {
+      throw new IllegalArgumentException("Income date cannot be null");
+    }
+
+    if (description == null || description.isBlank()) {
+      throw new IllegalArgumentException("Income description cannot be blank");
+    }
+
+    if (incomeSource == null) {
+      throw new IllegalArgumentException("Income source cannot be null");
+    }
+
+    if (account == null) {
+      throw new IllegalArgumentException("Income account cannot be null");
+    }
+
     this.amount = amount;
     this.date = date;
     this.description = description;
