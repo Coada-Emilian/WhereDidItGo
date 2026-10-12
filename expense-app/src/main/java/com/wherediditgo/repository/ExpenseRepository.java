@@ -3,7 +3,7 @@ package com.wherediditgo.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wherediditgo.entity.Expense;
+import com.wherediditgo.domain.Expense;
 
 public class ExpenseRepository {
 

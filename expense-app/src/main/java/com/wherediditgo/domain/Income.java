@@ -1,4 +1,4 @@
-package com.wherediditgo.entity;
+package com.wherediditgo.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
