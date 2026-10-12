@@ -26,24 +26,10 @@ public class Expense {
   }
 
   /**
-   * @param amount the amount to set
-   */
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
-  }
-
-  /**
    * @return LocalDate return the date
    */
   public LocalDate getDate() {
     return date;
-  }
-
-  /**
-   * @param date the date to set
-   */
-  public void setDate(LocalDate date) {
-    this.date = date;
   }
 
   /**
@@ -54,24 +40,10 @@ public class Expense {
   }
 
   /**
-   * @param description the description to set
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
    * @return Category return the category
    */
   public Category getCategory() {
     return category;
-  }
-
-  /**
-   * @param category the category to set
-   */
-  public void setCategory(Category category) {
-    this.category = category;
   }
 
   /**
@@ -81,14 +53,27 @@ public class Expense {
     return account;
   }
 
-  /**
-   * @param account the account to set
-   */
-  public void setAccount(Account account) {
-    this.account = account;
-  }
-
   public Expense(BigDecimal amount, LocalDate date, String description, Category category, Account account) {
+    if (amount == null || amount.signum() <= 0) {
+      throw new IllegalArgumentException("Expense amount must be positive");
+    }
+
+    if (date == null) {
+      throw new IllegalArgumentException("Expense date cannot be null");
+    }
+
+    if (description == null || description.isBlank()) {
+      throw new IllegalArgumentException("Expense description cannot be blank");
+    }
+
+    if (category == null) {
+      throw new IllegalArgumentException("Expense category cannot be null");
+    }
+
+    if (account == null) {
+      throw new IllegalArgumentException("Expense account cannot be null");
+    }
+
     this.amount = amount;
     this.date = date;
     this.description = description;
