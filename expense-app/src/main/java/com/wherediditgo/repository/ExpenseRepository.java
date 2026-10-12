@@ -9,11 +9,15 @@ public class ExpenseRepository {
 
     private final List<Expense> expenses = new ArrayList<>();
 
+    private Long nextId = 1L;
+
     public void create(Expense expense) {
         if (expense == null) {
             throw new IllegalArgumentException("Expense cannot be null");
         }
 
+        expense.assignId(nextId);
+        nextId++;
         expenses.add(expense);
     }
 
@@ -22,6 +26,10 @@ public class ExpenseRepository {
     }
 
     public Expense findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         return expenses.stream()
                 .filter(expense -> expense.getId().equals(id))
                 .findFirst()
