@@ -4,7 +4,7 @@ public class Account {
 
     private Long id;
     private String name;
-    private String type;
+    private Type type;
 
     /**
      * @return Long return the id
@@ -35,20 +35,20 @@ public class Account {
     }
 
     /**
-     * @return String return the type
+     * @return Type return the type
      */
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public Account(String name, String type) {
+    public Account(String name, Type type) {
         this.name = name;
         this.type = type;
     }
