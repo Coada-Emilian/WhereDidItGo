@@ -8,6 +8,56 @@ public class Income {
   private BigDecimal amount;
   private LocalDate date;
   private String description;
-  private String source;
+  private IncomeSource incomeSource;
   private Account account;
+
+  /**
+   * @return Long return the id
+   */
+  public Long getId() {
+    return id;
+  }
+
+  /**
+   * @return BigDecimal return the amount
+   */
+  public BigDecimal getAmount() {
+    return amount;
+  }
+
+  /**
+   * @return LocalDate return the date
+   */
+  public LocalDate getDate() {
+    return date;
+  }
+
+  /**
+   * @return String return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * @return String return the source
+   */
+  public IncomeSource getIncomeSource() {
+    return incomeSource;
+  }
+
+  /**
+   * @return Account return the account
+   */
+  public Account getAccount() {
+    return account;
+  }
+
+  public Income(BigDecimal amount, LocalDate date, String description, IncomeSource incomeSource, Account account) {
+    this.amount = amount;
+    this.date = date;
+    this.description = description;
+    this.incomeSource = incomeSource;
+    this.account = account;
+  }
 }
