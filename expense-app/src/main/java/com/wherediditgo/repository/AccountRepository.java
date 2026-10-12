@@ -7,41 +7,41 @@ import com.wherediditgo.domain.Account;
 
 public class AccountRepository {
 
-  private final List<Account> accounts = new ArrayList<>();
+    private final List<Account> accounts = new ArrayList<>();
 
-  private Long nextId = 1L;
+    private Long nextId = 1L;
 
-  public void create(Account account) {
-    if (account == null) {
-      throw new IllegalArgumentException("Account cannot be null");
+    public void create(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+
+        account.assignId(nextId);
+        nextId++;
+        accounts.add(account);
     }
 
-    account.assignId(nextId);
-    nextId++;
-    accounts.add(income);
-  }
-
-  public List<Income> findAll() {
-    return new ArrayList<>(incomes);
-  }
-
-  public Income findById(Long id) {
-    if (id == null) {
-      throw new IllegalArgumentException("ID cannot be null");
+    public List<Account> findAll() {
+        return new ArrayList<>(accounts);
     }
 
-    return incomes.stream()
-        .filter(income -> income.getId().equals(id))
-        .findFirst()
-        .orElse(null);
-  }
+    public Account findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
 
-  public void delete(Income income) {
-    if (income == null) {
-      throw new IllegalArgumentException("Income cannot be null");
+        return accounts.stream()
+                .filter(account -> account.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
-    incomes.remove(income);
-  }
+    public void delete(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+
+        accounts.remove(account);
+    }
 
 }
