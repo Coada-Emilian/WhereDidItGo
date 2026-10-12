@@ -4,20 +4,13 @@ public class Account {
 
     private Long id;
     private String name;
-    private Type type;
+    private AccountType accountType;
 
     /**
      * @return Long return the id
      */
     public Long getId() {
         return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /**
@@ -35,22 +28,22 @@ public class Account {
     }
 
     /**
-     * @return Type return the type
+     * @return AccountType return the type
      */
-    public Type getType() {
-        return type;
+    public AccountType getAccountType() {
+        return accountType;
     }
 
     /**
-     * @param type the type to set
+     * @param accountType the type to set
      */
-    public void setType(Type type) {
-        this.type = type;
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
-    public Account(String name, Type type) {
+    public Account(String name, AccountType accountType) {
         this.name = name;
-        this.type = type;
+        this.accountType = accountType;
     }
 
 }
