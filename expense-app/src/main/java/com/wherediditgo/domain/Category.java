@@ -13,13 +13,6 @@ public class Category {
   }
 
   /**
-   * @param id the id to set
-   */
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  /**
    * @return String return the name
    */
   public String getName() {
@@ -33,4 +26,7 @@ public class Category {
     this.name = name;
   }
 
+  public Category(String name) {
+    this.name = name;
+  }
 }

@@ -21,29 +21,22 @@ public class Account {
     }
 
     /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * @return AccountType return the type
      */
     public AccountType getAccountType() {
         return accountType;
     }
 
-    /**
-     * @param accountType the type to set
-     */
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
-    }
-
     public Account(String name, AccountType accountType) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Account name cannot be blank");
+        }
+
+        if (accountType == null) {
+            throw new IllegalArgumentException("Account type cannot be null");
+        }
+
         this.name = name;
         this.accountType = accountType;
     }
-
 }
