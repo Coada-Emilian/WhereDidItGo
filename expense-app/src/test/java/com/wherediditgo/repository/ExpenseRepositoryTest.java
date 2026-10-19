@@ -74,4 +74,24 @@ public class ExpenseRepositoryTest {
 
     assertEquals(0, expenses.size());
   }
+
+  @Test
+  public void findById_shouldReturnExpenseWhenExists() {
+    Account account = new Account("Savings account", AccountType.SAVINGS);
+    Category category = new Category("Strippers & BlackJack");
+
+    Expense expense = new Expense(
+        new BigDecimal("100.00"),
+        LocalDate.of(2026, 10, 14),
+        "Weekend fun",
+        category,
+        account);
+
+    repository.create(expense);
+
+    var foundExpense = repository.findById(expense.getId());
+
+    System.out.println(foundExpense);
+    assertEquals(expense, foundExpense);
+  }
 }
