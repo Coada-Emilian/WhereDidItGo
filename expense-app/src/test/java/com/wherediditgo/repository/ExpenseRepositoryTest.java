@@ -1,15 +1,16 @@
+package com.wherediditgo.repository;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import com.wherediditgo.domain.Category;
 
 import org.junit.jupiter.api.Test;
 
 import com.wherediditgo.domain.Account;
 import com.wherediditgo.domain.AccountType;
+import com.wherediditgo.domain.Category;
 import com.wherediditgo.domain.Expense;
-import com.wherediditgo.repository.ExpenseRepository;
 
 public class ExpenseRepositoryTest {
 
