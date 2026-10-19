@@ -55,7 +55,35 @@ public class IncomeRepositoryTest {
 
     incomeRepository.create(income2);
 
-    assertEquals(1, income1.getId());
-    assertEquals(2, income2.getId());
+    assertEquals(true, income1.getId() != null);
+    assertEquals(true, income2.getId() != null);
+
+    assertEquals(1L, income1.getId());
+    assertEquals(2L, income2.getId());
+
+    assertEquals(true, !income1.getId().equals(income2.getId()));
   }
+
+  @Test
+  public void findAll_shouldReturnAllIncomes() {
+    Account account = new Account("Savings", AccountType.SAVINGS);
+
+    LocalDate currentDate = LocalDate.now();
+
+    Income income1 = new Income((BigDecimal.valueOf(3000.0)), currentDate, "Income from side hustle.",
+        IncomeSource.OTHER,
+        account);
+
+    incomeRepository.create(income1);
+
+    Income income2 = new Income((BigDecimal.valueOf(5000.0)), currentDate,
+        "Income from second hand market selling.",
+        IncomeSource.OTHER,
+        account);
+
+    incomeRepository.create(income2);
+
+    assertEquals(2, incomeRepository.findAll().size());
+  }
+
 }
