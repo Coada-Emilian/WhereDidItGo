@@ -48,11 +48,12 @@ public class AccountRepositoryTest {
     accountRepository.create(account1);
     accountRepository.create(account2);
 
+    assertEquals(true, account1.getId() != null);
+    assertEquals(true, account2.getId() != null);
+
     assertEquals(1L, account1.getId());
     assertEquals(2L, account2.getId());
 
-    assertEquals(true, account1.getId() != null);
-    assertEquals(true, account2.getId() != null);
     assertEquals(true, !account1.getId().equals(account2.getId()));
   }
 
