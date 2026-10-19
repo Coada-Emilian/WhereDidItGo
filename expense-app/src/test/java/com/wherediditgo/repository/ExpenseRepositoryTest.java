@@ -67,4 +67,5 @@ public class ExpenseRepositoryTest {
     assertEquals(expense1, expenses.get(0));
     assertEquals(expense2, expenses.get(1));
   }
+
 }
