@@ -120,9 +120,7 @@ public class ExpenseRepositoryTest {
   // Test for retrieving an empty list when no expenses exist
   @Test
   public void findAll_shouldReturnEmptyListWhenNoExpenses() {
-    var expenses = repository.findAll();
-
-    assertEquals(0, expenses.size());
+    assertEquals(0, repository.findAll().size());
   }
 
   // Test for retrieving an expense by its ID when it exists

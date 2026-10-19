@@ -77,9 +77,7 @@ public class AccountRepositoryTest {
   @Test
   // Test method for finding all accounts when none exist
   public void findAll_shouldReturnEmptyListWhenNoAccounts() {
-    var accounts = accountRepository.findAll();
-
-    assertEquals(0, accounts.size());
+    assertEquals(0, accountRepository.findAll().size());
   }
 
   @Test
