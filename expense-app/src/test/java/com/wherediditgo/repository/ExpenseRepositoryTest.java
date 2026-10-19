@@ -191,4 +191,33 @@ public class ExpenseRepositoryTest {
         IllegalArgumentException.class,
         () -> repository.delete(null));
   }
+
+  @Test
+  public void update_shouldUpdateExpense() {
+    Account account = new Account("Savings account", AccountType.SAVINGS);
+    Category category = new Category("Strippers & BlackJack");
+
+    Expense expense = new Expense(
+        new BigDecimal("100.00"),
+        LocalDate.of(2026, 10, 14),
+        "Weekend fun",
+        category,
+        account);
+
+    repository.create(expense);
+
+    Expense updatedExpense = new Expense(
+        new BigDecimal("150.00"),
+        LocalDate.of(2026, 10, 15),
+        "Weekend fun updated",
+        category,
+        account);
+
+    updatedExpense.assignId(expense.getId());
+
+    repository.update(updatedExpense);
+
+    var foundExpense = repository.findById(expense.getId());
+    assertEquals(updatedExpense, foundExpense);
+  }
 }
