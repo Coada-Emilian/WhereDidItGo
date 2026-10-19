@@ -10,14 +10,16 @@ import com.wherediditgo.domain.Account;
 import com.wherediditgo.domain.AccountType;
 
 public class AccountRepositoryTest {
-
+  // Test class for AccountRepository
   private AccountRepository accountRepository;
 
+  // Test setup method to initialize the repository before each test
   @BeforeEach
   void setUp() {
     accountRepository = new AccountRepository();
   }
 
+  // Test method for creating an account
   @Test
   public void createAccount_shouldSaveAccount() {
     Account account = new Account("Main account", AccountType.CHECKING);
@@ -28,6 +30,7 @@ public class AccountRepositoryTest {
     assertEquals(account, accountRepository.findAll().get(0));
   }
 
+  // Test method for rejecting null account creation
   @Test
   public void createAccount_shouldRejectNullAccount() {
     assertThrows(
@@ -36,6 +39,7 @@ public class AccountRepositoryTest {
 
   }
 
+  // Test method for assigning unique IDs to created accounts
   @Test
   public void createAccount_shouldAssignUniqueIds() {
     Account account1 = new Account("First account", AccountType.SAVINGS);
@@ -53,6 +57,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for finding all accounts
   public void findAll_shouldReturnAllAccounts() {
     Account account1 = new Account("First account", AccountType.SAVINGS);
     Account account2 = new Account("Second account", AccountType.CHECKING);
@@ -69,6 +74,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for finding all accounts when none exist
   public void findAll_shouldReturnEmptyListWhenNoAccounts() {
     var accounts = accountRepository.findAll();
 
@@ -76,6 +82,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for finding an account by ID when it exists
   public void findById_shouldReturnAccountWhenExists() {
     Account account = new Account("Main account", AccountType.CHECKING);
     accountRepository.create(account);
@@ -86,6 +93,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for finding an account by ID when it does not exist
   public void findById_shouldReturnNullWhenAccountDoesNotExist() {
     var foundAccount = accountRepository.findById(1L);
 
@@ -93,6 +101,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for rejecting null ID in findById
   public void findById_shouldRejectNullId() {
     assertThrows(
         IllegalArgumentException.class,
@@ -100,6 +109,7 @@ public class AccountRepositoryTest {
   }
 
   @Test
+  // Test method for deleting an account
   public void delete_shouldRemoveAccount() {
     Account account = new Account("Main account", AccountType.CHECKING);
     accountRepository.create(account);
@@ -113,4 +123,43 @@ public class AccountRepositoryTest {
     assertEquals(0, accountRepository.findAll().size());
   }
 
+  @Test
+  // Test method for rejecting null account deletion
+  public void delete_shouldRejectNullAccount() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> accountRepository.delete(null));
+  }
+
+  @Test
+  // Test method for rejecting deletion of a non-existent account
+  public void delete_shouldRejectNonExistentAccount() {
+    Account account = new Account("Non-existent account", AccountType.SAVINGS);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> accountRepository.delete(account));
+  }
+
+  @Test
+  // Test method for updating an account
+  public void update_shouldUpdateAccount() {
+    Account account = new Account("Main account", AccountType.CHECKING);
+    accountRepository.create(account);
+
+    Account updatedAccount = new Account("Updated account", AccountType.SAVINGS);
+
+    updatedAccount.assignId(account.getId());
+    accountRepository.update(updatedAccount);
+
+    Account foundAccount = accountRepository.findById(account.getId());
+    assertEquals(updatedAccount, foundAccount);
+  }
+
+  @Test
+  // Test method for rejecting null account update
+  public void update_shouldRejectNullAccount() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> accountRepository.update(null));
+  }
 }
