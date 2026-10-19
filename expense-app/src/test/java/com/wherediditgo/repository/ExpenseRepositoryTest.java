@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.wherediditgo.domain.Account;
@@ -13,7 +14,12 @@ import com.wherediditgo.domain.Category;
 import com.wherediditgo.domain.Expense;
 
 public class ExpenseRepositoryTest {
-  ExpenseRepository repository = new ExpenseRepository();
+  private ExpenseRepository repository;
+
+  @BeforeEach
+  void setUp() {
+    repository = new ExpenseRepository();
+  }
 
   @Test
   public void create_shouldStoreExpense() {
@@ -99,5 +105,28 @@ public class ExpenseRepositoryTest {
     var expense = repository.findById(1L);
 
     assertEquals(null, expense);
+  }
+
+  @Test
+  public void delete_shouldDeleteExpense() {
+    Account account = new Account("Savings account", AccountType.SAVINGS);
+    Category category = new Category("Strippers & BlackJack");
+
+    Expense expense = new Expense(
+        new BigDecimal("100.00"),
+        LocalDate.of(2026, 10, 14),
+        "Weekend fun",
+        category,
+        account);
+
+    repository.create(expense);
+
+    assertEquals(1, repository.findAll().size());
+
+    Expense foundExpense = repository.findAll().get(0);
+
+    repository.delete(foundExpense);
+
+    assertEquals(0, repository.findAll().size());
   }
 }
