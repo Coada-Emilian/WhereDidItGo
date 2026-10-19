@@ -44,4 +44,18 @@ public class AccountRepository {
         accounts.remove(account);
     }
 
+    public void update(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+
+        Account existingAccount = findById(account.getId());
+        if (existingAccount == null) {
+            throw new IllegalArgumentException("Account not found");
+        }
+
+        accounts.remove(existingAccount);
+        accounts.add(account);
+    }
+
 }

@@ -44,4 +44,17 @@ public class ExpenseRepository {
         expenses.remove(expense);
     }
 
+    public void update(Expense expense) {
+        if (expense == null) {
+            throw new IllegalArgumentException("Expense cannot be null");
+        }
+
+        Expense existingExpense = findById(expense.getId());
+        if (existingExpense == null) {
+            throw new IllegalArgumentException("Expense not found");
+        }
+
+        expenses.remove(existingExpense);
+        expenses.add(expense);
+    }
 }
