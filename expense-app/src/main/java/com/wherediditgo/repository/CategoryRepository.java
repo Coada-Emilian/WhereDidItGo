@@ -42,7 +42,9 @@ public class CategoryRepository {
       throw new IllegalArgumentException("Category cannot be null");
     }
 
-    categories.remove(category);
+    if (!categories.remove(category)) {
+      throw new IllegalArgumentException("Category not found");
+    }
   }
 
   public void update(Category category) {
