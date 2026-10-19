@@ -220,4 +220,11 @@ public class ExpenseRepositoryTest {
     var foundExpense = repository.findById(expense.getId());
     assertEquals(updatedExpense, foundExpense);
   }
+
+  @Test
+  public void update_shouldRejectNullExpense() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.update(null));
+  }
 }
