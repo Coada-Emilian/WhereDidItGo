@@ -35,4 +35,20 @@ public class AccountRepositoryTest {
         () -> accountRepository.create(null));
 
   }
+
+  @Test
+  public void createAccount_shouldAssignUniqueIds() {
+    Account account1 = new Account("First account", AccountType.SAVINGS);
+    Account account2 = new Account("Second account", AccountType.CHECKING);
+
+    accountRepository.create(account1);
+    accountRepository.create(account2);
+
+    assertEquals(1L, account1.getId());
+    assertEquals(2L, account2.getId());
+
+    assertEquals(true, account1.getId() != null);
+    assertEquals(true, account2.getId() != null);
+    assertEquals(true, !account1.getId().equals(account2.getId()));
+  }
 }
