@@ -42,6 +42,22 @@ public class CategoryRepository {
       throw new IllegalArgumentException("Category cannot be null");
     }
 
-    categories.remove(category);
+    if (!categories.remove(category)) {
+      throw new IllegalArgumentException("Category not found");
+    }
+  }
+
+  public void update(Category category) {
+    if (category == null) {
+      throw new IllegalArgumentException("Category cannot be null");
+    }
+
+    Category existingCategory = findById(category.getId());
+    if (existingCategory == null) {
+      throw new IllegalArgumentException("Category not found");
+    }
+
+    categories.remove(existingCategory);
+    categories.add(category);
   }
 }

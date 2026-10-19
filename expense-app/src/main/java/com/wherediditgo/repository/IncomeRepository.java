@@ -44,4 +44,18 @@ public class IncomeRepository {
         incomes.remove(income);
     }
 
+    public void update(Income income) {
+        if (income == null) {
+            throw new IllegalArgumentException("Income cannot be null");
+        }
+
+        Income existingIncome = findById(income.getId());
+        if (existingIncome == null) {
+            throw new IllegalArgumentException("Income not found");
+        }
+
+        incomes.remove(existingIncome);
+        incomes.add(income);
+    }
+
 }

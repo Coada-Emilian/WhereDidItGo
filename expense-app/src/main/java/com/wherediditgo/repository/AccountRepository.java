@@ -41,7 +41,24 @@ public class AccountRepository {
             throw new IllegalArgumentException("Account cannot be null");
         }
 
+        if (!accounts.remove(account)) {
+            throw new IllegalArgumentException("Account does not exist");
+        }
         accounts.remove(account);
+    }
+
+    public void update(Account account) {
+        if (account == null) {
+            throw new IllegalArgumentException("Account cannot be null");
+        }
+
+        Account existingAccount = findById(account.getId());
+        if (existingAccount == null) {
+            throw new IllegalArgumentException("Account not found");
+        }
+
+        accounts.remove(existingAccount);
+        accounts.add(account);
     }
 
 }
