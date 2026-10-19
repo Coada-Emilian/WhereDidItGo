@@ -67,4 +67,50 @@ public class AccountRepositoryTest {
     assertEquals(account2, accountRepository.findAll().get(1));
     assertEquals(account3, accountRepository.findAll().get(2));
   }
+
+  @Test
+  public void findAll_shouldReturnEmptyListWhenNoAccounts() {
+    var accounts = accountRepository.findAll();
+
+    assertEquals(0, accounts.size());
+  }
+
+  @Test
+  public void findById_shouldReturnAccountWhenExists() {
+    Account account = new Account("Main account", AccountType.CHECKING);
+    accountRepository.create(account);
+
+    var foundAccount = accountRepository.findById(account.getId());
+
+    assertEquals(account, foundAccount);
+  }
+
+  @Test
+  public void findById_shouldReturnNullWhenAccountDoesNotExist() {
+    var foundAccount = accountRepository.findById(1L);
+
+    assertEquals(null, foundAccount);
+  }
+
+  @Test
+  public void findById_shouldRejectNullId() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> accountRepository.findById(null));
+  }
+
+  @Test
+  public void delete_shouldRemoveAccount() {
+    Account account = new Account("Main account", AccountType.CHECKING);
+    accountRepository.create(account);
+
+    assertEquals(1, accountRepository.findAll().size());
+
+    Account foundAccount = accountRepository.findById(account.getId());
+
+    accountRepository.delete(foundAccount);
+
+    assertEquals(0, accountRepository.findAll().size());
+  }
+
 }
