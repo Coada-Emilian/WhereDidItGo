@@ -91,7 +91,13 @@ public class ExpenseRepositoryTest {
 
     var foundExpense = repository.findById(expense.getId());
 
-    System.out.println(foundExpense);
     assertEquals(expense, foundExpense);
+  }
+
+  @Test
+  public void findById_shouldNotReturnExpenseIfNoneExists() {
+    var expense = repository.findById(1L);
+
+    assertEquals(null, expense);
   }
 }
