@@ -1,6 +1,7 @@
 package com.wherediditgo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +40,40 @@ public class ExpenseRepositoryTest {
 
     assertEquals(1, repository.findAll().size());
     assertEquals(expense, repository.findAll().get(0));
+  }
+
+  @Test
+  public void create_shouldRejectNullExpense() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.create(null));
+  }
+
+  @Test
+  public void create_shouldAssignUniqueIds() {
+    Account account = new Account("Main account", AccountType.CHECKING);
+    Category category = new Category("Groceries");
+
+    Expense expense1 = new Expense(
+        new BigDecimal("25.50"),
+        LocalDate.of(2026, 10, 12),
+        "Weekly shopping",
+        category,
+        account);
+
+    Expense expense2 = new Expense(
+        new BigDecimal("30.00"),
+        LocalDate.of(2026, 10, 13),
+        "Extra shopping",
+        category,
+        account);
+
+    repository.create(expense1);
+    repository.create(expense2);
+
+    assertEquals(true, expense1.getId() != null);
+    assertEquals(true, expense2.getId() != null);
+    assertEquals(true, !expense1.getId().equals(expense2.getId()));
   }
 
   @Test
@@ -108,6 +143,13 @@ public class ExpenseRepositoryTest {
   }
 
   @Test
+  public void findById_shouldRejectNullId() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.findById(null));
+  }
+
+  @Test
   public void delete_shouldDeleteExpense() {
     Account account = new Account("Savings account", AccountType.SAVINGS);
     Category category = new Category("Strippers & BlackJack");
@@ -128,5 +170,12 @@ public class ExpenseRepositoryTest {
     repository.delete(foundExpense);
 
     assertEquals(0, repository.findAll().size());
+  }
+
+  @Test
+  public void delete_shouldRejectNullExpense() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.delete(null));
   }
 }
