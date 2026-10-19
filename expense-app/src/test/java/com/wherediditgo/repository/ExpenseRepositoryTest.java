@@ -68,4 +68,10 @@ public class ExpenseRepositoryTest {
     assertEquals(expense2, expenses.get(1));
   }
 
+  @Test
+  public void findAll_shouldReturnEmptyListWhenNoExpenses() {
+    var expenses = repository.findAll();
+
+    assertEquals(0, expenses.size());
+  }
 }
