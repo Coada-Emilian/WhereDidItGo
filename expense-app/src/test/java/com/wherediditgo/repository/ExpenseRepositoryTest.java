@@ -15,13 +15,16 @@ import com.wherediditgo.domain.Category;
 import com.wherediditgo.domain.Expense;
 
 public class ExpenseRepositoryTest {
+  // Tests for the ExpenseRepository class
   private ExpenseRepository repository;
 
+  // Initialize the repository before each test
   @BeforeEach
   void setUp() {
     repository = new ExpenseRepository();
   }
 
+  // Test for creating an expense and storing it in the repository
   @Test
   public void create_shouldStoreExpense() {
 
@@ -42,6 +45,7 @@ public class ExpenseRepositoryTest {
     assertEquals(expense, repository.findAll().get(0));
   }
 
+  // Test for rejecting a null expense
   @Test
   public void create_shouldRejectNullExpense() {
     assertThrows(
@@ -49,6 +53,7 @@ public class ExpenseRepositoryTest {
         () -> repository.create(null));
   }
 
+  // Test for assigning unique IDs to created expenses
   @Test
   public void create_shouldAssignUniqueIds() {
     Account account = new Account("Main account", AccountType.CHECKING);
@@ -73,9 +78,12 @@ public class ExpenseRepositoryTest {
 
     assertEquals(true, expense1.getId() != null);
     assertEquals(true, expense2.getId() != null);
+    assertEquals(1L, expense1.getId());
+    assertEquals(2L, expense2.getId());
     assertEquals(true, !expense1.getId().equals(expense2.getId()));
   }
 
+  // Test for retrieving all expenses from the repository
   @Test
   public void findAll_shouldReturnAllExpenses() {
 
@@ -109,6 +117,7 @@ public class ExpenseRepositoryTest {
     assertEquals(expense2, expenses.get(1));
   }
 
+  // Test for retrieving an empty list when no expenses exist
   @Test
   public void findAll_shouldReturnEmptyListWhenNoExpenses() {
     var expenses = repository.findAll();
@@ -116,6 +125,7 @@ public class ExpenseRepositoryTest {
     assertEquals(0, expenses.size());
   }
 
+  // Test for retrieving an expense by its ID when it exists
   @Test
   public void findById_shouldReturnExpenseWhenExists() {
     Account account = new Account("Savings account", AccountType.SAVINGS);
@@ -135,6 +145,7 @@ public class ExpenseRepositoryTest {
     assertEquals(expense, foundExpense);
   }
 
+  // Test for retrieving an expense by its ID when it does not exist
   @Test
   public void findById_shouldNotReturnExpenseIfNoneExists() {
     var expense = repository.findById(1L);
@@ -142,6 +153,7 @@ public class ExpenseRepositoryTest {
     assertEquals(null, expense);
   }
 
+  // Test for rejecting a null ID when retrieving an expense
   @Test
   public void findById_shouldRejectNullId() {
     assertThrows(
@@ -172,6 +184,7 @@ public class ExpenseRepositoryTest {
     assertEquals(0, repository.findAll().size());
   }
 
+  // Test for rejecting a null expense when deleting
   @Test
   public void delete_shouldRejectNullExpense() {
     assertThrows(
