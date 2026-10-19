@@ -1,6 +1,7 @@
 package com.wherediditgo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,5 +26,13 @@ public class AccountRepositoryTest {
 
     assertEquals(1, accountRepository.findAll().size());
     assertEquals(account, accountRepository.findAll().get(0));
+  }
+
+  @Test
+  public void createAccount_shouldRejectNullAccount() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> accountRepository.create(null));
+
   }
 }
