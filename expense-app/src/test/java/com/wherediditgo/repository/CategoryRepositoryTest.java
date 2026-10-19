@@ -72,9 +72,7 @@ public class CategoryRepositoryTest {
   @Test
   // Test method for finding all categories when none exist
   public void findAll_shouldReturnEmptyListWhenNoCategories() {
-    var categories = categoryRepository.findAll();
-
-    assertEquals(0, categories.size());
+    assertEquals(0, categoryRepository.findAll().size());
   }
 
   // Test method for finding a category by ID when it exists
