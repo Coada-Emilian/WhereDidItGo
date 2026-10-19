@@ -51,4 +51,20 @@ public class AccountRepositoryTest {
     assertEquals(true, account2.getId() != null);
     assertEquals(true, !account1.getId().equals(account2.getId()));
   }
+
+  @Test
+  public void findAll_shouldReturnAllAccounts() {
+    Account account1 = new Account("First account", AccountType.SAVINGS);
+    Account account2 = new Account("Second account", AccountType.CHECKING);
+    Account account3 = new Account("Third account", AccountType.INVESTMENT);
+
+    accountRepository.create(account1);
+    accountRepository.create(account2);
+    accountRepository.create(account3);
+
+    assertEquals(3, accountRepository.findAll().size());
+    assertEquals(account1, accountRepository.findAll().get(0));
+    assertEquals(account2, accountRepository.findAll().get(1));
+    assertEquals(account3, accountRepository.findAll().get(2));
+  }
 }
