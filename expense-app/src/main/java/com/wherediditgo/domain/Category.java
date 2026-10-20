@@ -19,6 +19,7 @@ public class Category {
     return name;
   }
 
+  // Constructor for creating a new Category with validation
   public Category(String name) {
     if (name == null || name.isBlank()) {
       throw new IllegalArgumentException("Category name cannot be blank");
@@ -27,6 +28,7 @@ public class Category {
     this.name = name;
   }
 
+  // Method to assign an ID to the category with validation
   public void assignId(Long id) {
     if (this.id != null) {
       throw new IllegalStateException("Category already has an ID");
