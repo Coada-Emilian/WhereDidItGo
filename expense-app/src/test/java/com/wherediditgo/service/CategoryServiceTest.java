@@ -1,6 +1,8 @@
+
 package com.wherediditgo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -61,19 +63,56 @@ public class CategoryServiceTest {
   }
 
   @Test
+  public void getCategoryById_shouldThrowForNullId() {
+    assertThrows(IllegalArgumentException.class,
+        () -> service.getCategoryById(null));
+  }
+
+  @Test
+  public void getCategoryById_shouldThrowForNonExistentCategory() {
+    assertThrows(IllegalArgumentException.class,
+        () -> service.getCategoryById(999L));
+  }
+
+  @Test
   public void updateCategory_shouldModifyCategory() {
     Category groceries = new Category("Groceries");
     service.createCategory(groceries);
 
     Long id = groceries.getId();
-
     Category entertainment = new Category("Entertainment");
 
     service.updateCategory(id, entertainment);
 
     Category updated = service.getCategoryById(id);
+
     assertEquals(id, updated.getId());
     assertEquals("Entertainment", updated.getName());
+  }
+
+  @Test
+  public void updateCategory_shouldThrowForNullId() {
+    Category entertainment = new Category("Entertainment");
+
+    assertThrows(IllegalArgumentException.class,
+        () -> service.updateCategory(null, entertainment));
+  }
+
+  @Test
+  public void updateCategory_shouldThrowForNullCategory() {
+    Category groceries = new Category("Groceries");
+    service.createCategory(groceries);
+
+    assertThrows(IllegalArgumentException.class,
+        () -> service.updateCategory(groceries.getId(), null));
+  }
+
+  @Test
+  public void updateCategory_shouldThrowForNonExistentCategory() {
+    Category entertainment = new Category("Entertainment");
+
+    assertThrows(IllegalArgumentException.class,
+        () -> service.updateCategory(999L, entertainment));
   }
 
   @Test
@@ -85,7 +124,18 @@ public class CategoryServiceTest {
 
     service.deleteCategory(id);
 
-    List<Category> categories = service.getAllCategories();
-    assertEquals(0, categories.size());
+    assertEquals(0, service.getAllCategories().size());
+  }
+
+  @Test
+  public void deleteCategory_shouldThrowForNullId() {
+    assertThrows(IllegalArgumentException.class,
+        () -> service.deleteCategory(null));
+  }
+
+  @Test
+  public void deleteCategory_shouldThrowForNonExistentCategory() {
+    assertThrows(IllegalArgumentException.class,
+        () -> service.deleteCategory(999L));
   }
 }
