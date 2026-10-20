@@ -1,6 +1,9 @@
 package com.wherediditgo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,16 +12,18 @@ import org.junit.jupiter.api.Test;
 import com.wherediditgo.domain.Category;
 
 public class CategoryRepositoryTest {
-  // Test class for CategoryRepository
+
   private CategoryRepository categoryRepository;
 
-  // Test setup method to initialize the repository before each test
+  // Initialize the CategoryRepository before each test
   @BeforeEach
   void setUp() {
     categoryRepository = new CategoryRepository();
   }
 
-  // Test method for creating a category
+  // CREATE
+
+  // Test for creating categories
   @Test
   public void create_shouldSaveCategory() {
     Category category = new Category("Groceries");
@@ -29,7 +34,7 @@ public class CategoryRepositoryTest {
     assertEquals(category, categoryRepository.findAll().get(0));
   }
 
-  // Test method for rejecting null category
+  // Test for rejecting null categories
   @Test
   public void create_shouldRejectNullCategory() {
     assertThrows(
@@ -37,8 +42,8 @@ public class CategoryRepositoryTest {
         () -> categoryRepository.create(null));
   }
 
+  // Test for assigning unique IDs to categories
   @Test
-  // Test method for assigning unique IDs to categories
   public void create_shouldAssignUniqueIds() {
     Category category1 = new Category("Groceries");
     Category category2 = new Category("Utilities");
@@ -46,17 +51,17 @@ public class CategoryRepositoryTest {
     categoryRepository.create(category1);
     categoryRepository.create(category2);
 
-    assertEquals(true, category1.getId() != null);
-    assertEquals(true, category2.getId() != null);
-
+    assertNotNull(category1.getId());
+    assertNotNull(category2.getId());
     assertEquals(1L, category1.getId());
     assertEquals(2L, category2.getId());
-
-    assertEquals(true, !category1.getId().equals(category2.getId()));
+    assertNotEquals(category1.getId(), category2.getId());
   }
 
+  // READ
+
+  // Test for retrieving all categories
   @Test
-  // Test method for finding all categories
   public void findAll_shouldReturnAllCategories() {
     Category category1 = new Category("Groceries");
     Category category2 = new Category("Utilities");
@@ -69,55 +74,101 @@ public class CategoryRepositoryTest {
     assertEquals(category2, categoryRepository.findAll().get(1));
   }
 
+  // Test for retrieving all categories when none exist
   @Test
-  // Test method for finding all categories when none exist
   public void findAll_shouldReturnEmptyListWhenNoCategories() {
     assertEquals(0, categoryRepository.findAll().size());
   }
 
-  // Test method for finding a category by ID when it exists
+  // Test for retrieving a category by ID when it exists
   @Test
   public void findById_shouldReturnCategoryWhenExists() {
     Category category = new Category("Groceries");
     categoryRepository.create(category);
 
-    var foundCategory = categoryRepository.findById(category.getId());
+    Category foundCategory = categoryRepository.findById(category.getId());
 
     assertEquals(category, foundCategory);
   }
 
-  // Test method for finding a category by ID when it does not exist
+  // Test for retrieving a category by ID when it does not exist
   @Test
   public void findById_shouldReturnNullWhenCategoryDoesNotExist() {
-    var foundCategory = categoryRepository.findById(1L);
-
-    assertEquals(null, foundCategory);
+    assertNull(categoryRepository.findById(1L));
   }
 
+  // Test for rejecting null ID when retrieving a category by ID
   @Test
-  // Test method for rejecting null ID when finding a category by ID
   public void findById_shouldRejectNullId() {
     assertThrows(
         IllegalArgumentException.class,
         () -> categoryRepository.findById(null));
   }
 
-  // Test method for removing a category
+  // UPDATE
+
+  // Test for updating categories
+  @Test
+  public void update_shouldUpdateCategoryAndPreserveId() {
+    Category category = new Category("Groceries");
+    categoryRepository.create(category);
+
+    Long initialId = category.getId();
+    Category updatedCategory = new Category("Games");
+
+    categoryRepository.update(initialId, updatedCategory);
+
+    Category foundCategory = categoryRepository.findById(initialId);
+
+    assertEquals(initialId, foundCategory.getId());
+    assertEquals("Games", foundCategory.getName());
+    assertEquals(1, categoryRepository.findAll().size());
+    assertEquals(updatedCategory, foundCategory);
+  }
+
+  // Test for rejecting null ID when updating a category
+  @Test
+  public void update_shouldRejectNullId() {
+    Category updatedCategory = new Category("Consoles");
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> categoryRepository.update(null, updatedCategory));
+  }
+
+  // Test for rejecting null category when updating a category
+  @Test
+  public void update_shouldRejectNullCategory() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> categoryRepository.update(1L, null));
+  }
+
+  // Test for rejecting non-existent ID when updating a category
+  @Test
+  public void update_shouldRejectNonExistentId() {
+    Category updatedCategory = new Category("Consoles");
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> categoryRepository.update(99L, updatedCategory));
+  }
+
+  // DELETE
+
+  // Test for deleting categories
   @Test
   public void delete_shouldRemoveCategory() {
     Category category = new Category("Groceries");
     categoryRepository.create(category);
 
-    assertEquals(1, categoryRepository.findAll().size());
-
-    Category foundCategory = categoryRepository.findById(category.getId());
-
-    categoryRepository.delete(foundCategory);
+    categoryRepository.delete(category);
 
     assertEquals(0, categoryRepository.findAll().size());
+    assertNull(categoryRepository.findById(category.getId()));
   }
 
-  // Test method for rejecting null category when deleting
+  // Test for rejecting null category when deleting a category
   @Test
   public void delete_shouldRejectNullCategory() {
     assertThrows(
@@ -125,37 +176,13 @@ public class CategoryRepositoryTest {
         () -> categoryRepository.delete(null));
   }
 
-  // Test method for rejecting non-existent category when deleting
+  // Test for rejecting non-existent category when deleting a category
   @Test
   public void delete_shouldRejectNonExistentCategory() {
-    Category category = new Category("Non-existent category");
+    Category category = new Category("Games");
+
     assertThrows(
         IllegalArgumentException.class,
         () -> categoryRepository.delete(category));
-  }
-
-  // Test method for updating a category
-  @Test
-  public void update_shouldUpdateCategory() {
-    Category category = new Category("Groceries");
-    categoryRepository.create(category);
-
-    Category newCategory = new Category("Games");
-
-    newCategory.assignId(category.getId());
-
-    categoryRepository.update(newCategory);
-
-    Category foundCategory = categoryRepository.findById(category.getId());
-    assertEquals(newCategory, foundCategory);
-
-  }
-
-  // Test method for rejecting null category when updating
-  @Test
-  public void update_shouldRejectNullCategory() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> categoryRepository.update(null));
   }
 }
