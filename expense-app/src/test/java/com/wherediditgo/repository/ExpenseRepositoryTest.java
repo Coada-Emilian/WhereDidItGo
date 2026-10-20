@@ -1,6 +1,9 @@
 package com.wherediditgo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
@@ -15,20 +18,22 @@ import com.wherediditgo.domain.Category;
 import com.wherediditgo.domain.Expense;
 
 public class ExpenseRepositoryTest {
-  // Tests for the ExpenseRepository class
+
   private ExpenseRepository repository;
 
-  // Initialize the repository before each test
+  // Setup method to initialize the repository before each test
   @BeforeEach
   void setUp() {
     repository = new ExpenseRepository();
   }
 
-  // Test for creating an expense and storing it in the repository
+  // CREATE
+
+  // Test for creating expenses
   @Test
   public void create_shouldStoreExpense() {
-
-    Account account = new Account("Main account", AccountType.CHECKING);
+    Account account = new Account(
+        "Main account", AccountType.CHECKING, new BigDecimal("100.00"));
 
     Category category = new Category("Groceries");
 
@@ -45,7 +50,7 @@ public class ExpenseRepositoryTest {
     assertEquals(expense, repository.findAll().get(0));
   }
 
-  // Test for rejecting a null expense
+  // Test for rejecting null expenses when creating an expense
   @Test
   public void create_shouldRejectNullExpense() {
     assertThrows(
@@ -56,7 +61,8 @@ public class ExpenseRepositoryTest {
   // Test for assigning unique IDs to created expenses
   @Test
   public void create_shouldAssignUniqueIds() {
-    Account account = new Account("Main account", AccountType.CHECKING);
+    Account account = new Account(
+        "Main account", AccountType.CHECKING, new BigDecimal("100.00"));
     Category category = new Category("Groceries");
 
     Expense expense1 = new Expense(
@@ -76,18 +82,21 @@ public class ExpenseRepositoryTest {
     repository.create(expense1);
     repository.create(expense2);
 
-    assertEquals(true, expense1.getId() != null);
-    assertEquals(true, expense2.getId() != null);
+    assertNotNull(expense1.getId());
+    assertNotNull(expense2.getId());
     assertEquals(1L, expense1.getId());
     assertEquals(2L, expense2.getId());
-    assertEquals(true, !expense1.getId().equals(expense2.getId()));
+    assertNotEquals(expense1.getId(), expense2.getId());
   }
 
-  // Test for retrieving all expenses from the repository
+  // READ
+
+  // Test for retrieving all expenses
   @Test
   public void findAll_shouldReturnAllExpenses() {
+    Account account1 = new Account(
+        "Main account", AccountType.CHECKING, new BigDecimal("100.00"));
 
-    Account account1 = new Account("Main account", AccountType.CHECKING);
     Category category1 = new Category("Groceries");
 
     Expense expense1 = new Expense(
@@ -97,7 +106,9 @@ public class ExpenseRepositoryTest {
         category1,
         account1);
 
-    Account account2 = new Account("Savings account", AccountType.SAVINGS);
+    Account account2 = new Account(
+        "Savings account", AccountType.SAVINGS, new BigDecimal("500.00"));
+
     Category category2 = new Category("Entertainment");
 
     Expense expense2 = new Expense(
@@ -117,17 +128,18 @@ public class ExpenseRepositoryTest {
     assertEquals(expense2, expenses.get(1));
   }
 
-  // Test for retrieving an empty list when no expenses exist
+  // Test for retrieving all expenses when none exist
   @Test
   public void findAll_shouldReturnEmptyListWhenNoExpenses() {
     assertEquals(0, repository.findAll().size());
   }
 
-  // Test for retrieving an expense by its ID when it exists
+  // Test for retrieving an expense by ID when it exists
   @Test
   public void findById_shouldReturnExpenseWhenExists() {
-    Account account = new Account("Savings account", AccountType.SAVINGS);
-    Category category = new Category("Strippers & BlackJack");
+    Account account = new Account(
+        "Savings account", AccountType.SAVINGS, new BigDecimal("500.00"));
+    Category category = new Category("Entertainment");
 
     Expense expense = new Expense(
         new BigDecimal("100.00"),
@@ -138,20 +150,18 @@ public class ExpenseRepositoryTest {
 
     repository.create(expense);
 
-    var foundExpense = repository.findById(expense.getId());
+    Expense foundExpense = repository.findById(expense.getId());
 
     assertEquals(expense, foundExpense);
   }
 
-  // Test for retrieving an expense by its ID when it does not exist
+  // Test for retrieving an expense by ID when it does not exist
   @Test
-  public void findById_shouldNotReturnExpenseIfNoneExists() {
-    var expense = repository.findById(1L);
-
-    assertEquals(null, expense);
+  public void findById_shouldReturnNullWhenExpenseDoesNotExist() {
+    assertNull(repository.findById(1L));
   }
 
-  // Test for rejecting a null ID when retrieving an expense
+  // Test for rejecting null ID when retrieving an expense by ID
   @Test
   public void findById_shouldRejectNullId() {
     assertThrows(
@@ -159,10 +169,14 @@ public class ExpenseRepositoryTest {
         () -> repository.findById(null));
   }
 
+  // UPDATE
+
+  // Test for updating expenses
   @Test
-  public void delete_shouldDeleteExpense() {
-    Account account = new Account("Savings account", AccountType.SAVINGS);
-    Category category = new Category("Strippers & BlackJack");
+  public void update_shouldUpdateExpenseAndPreserveId() {
+    Account account = new Account(
+        "Savings account", AccountType.SAVINGS, new BigDecimal("500.00"));
+    Category category = new Category("Entertainment");
 
     Expense expense = new Expense(
         new BigDecimal("100.00"),
@@ -173,36 +187,7 @@ public class ExpenseRepositoryTest {
 
     repository.create(expense);
 
-    assertEquals(1, repository.findAll().size());
-
-    Expense foundExpense = repository.findAll().get(0);
-
-    repository.delete(foundExpense);
-
-    assertEquals(0, repository.findAll().size());
-  }
-
-  // Test for rejecting a null expense when deleting
-  @Test
-  public void delete_shouldRejectNullExpense() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> repository.delete(null));
-  }
-
-  @Test
-  public void update_shouldUpdateExpense() {
-    Account account = new Account("Savings account", AccountType.SAVINGS);
-    Category category = new Category("Strippers & BlackJack");
-
-    Expense expense = new Expense(
-        new BigDecimal("100.00"),
-        LocalDate.of(2026, 10, 14),
-        "Weekend fun",
-        category,
-        account);
-
-    repository.create(expense);
+    Long initialId = expense.getId();
 
     Expense updatedExpense = new Expense(
         new BigDecimal("150.00"),
@@ -211,18 +196,112 @@ public class ExpenseRepositoryTest {
         category,
         account);
 
-    updatedExpense.assignId(expense.getId());
+    repository.update(initialId, updatedExpense);
 
-    repository.update(updatedExpense);
+    Expense foundExpense = repository.findById(initialId);
 
-    var foundExpense = repository.findById(expense.getId());
+    assertEquals(initialId, foundExpense.getId());
+    assertEquals(new BigDecimal("150.00"), foundExpense.getAmount());
+    assertEquals(LocalDate.of(2026, 10, 15), foundExpense.getDate());
+    assertEquals("Weekend fun updated", foundExpense.getDescription());
+    assertEquals(1, repository.findAll().size());
     assertEquals(updatedExpense, foundExpense);
   }
 
+  // Test for rejecting null ID when updating an expense
+  @Test
+  public void update_shouldRejectNullId() {
+    Account account = new Account(
+        "Main account", AccountType.CHECKING, new BigDecimal("100.00"));
+    Category category = new Category("Groceries");
+
+    Expense updatedExpense = new Expense(
+        new BigDecimal("25.50"),
+        LocalDate.of(2026, 10, 12),
+        "Shopping",
+        category,
+        account);
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.update(null, updatedExpense));
+  }
+
+  // Test for rejecting null expense when updating an expense
   @Test
   public void update_shouldRejectNullExpense() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> repository.update(null));
+        () -> repository.update(1L, null));
+  }
+
+  // Test for rejecting non-existent ID when updating an expense
+  @Test
+  public void update_shouldRejectNonExistentId() {
+    Account account = new Account(
+        "Main account", AccountType.CHECKING, new BigDecimal("100.00"));
+    Category category = new Category("Groceries");
+
+    Expense updatedExpense = new Expense(
+        new BigDecimal("25.50"),
+        LocalDate.of(2026, 10, 12),
+        "Shopping",
+        category,
+        account);
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.update(99L, updatedExpense));
+  }
+
+  // DELETE
+
+  // Test for deleting expenses
+  @Test
+  public void delete_shouldRemoveExpense() {
+    Account account = new Account(
+        "Savings account", AccountType.SAVINGS, new BigDecimal("500.00"));
+    Category category = new Category("Entertainment");
+
+    Expense expense = new Expense(
+        new BigDecimal("100.00"),
+        LocalDate.of(2026, 10, 14),
+        "Weekend fun",
+        category,
+        account);
+
+    repository.create(expense);
+
+    repository.delete(expense);
+
+    assertEquals(0, repository.findAll().size());
+    assertNull(repository.findById(expense.getId()));
+  }
+
+  // Test for rejecting null expense when deleting an expense
+  @Test
+  public void delete_shouldRejectNullExpense() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.delete(null));
+  }
+
+  // Test for rejecting non-existent expense when deleting an expense
+  @Test
+  public void delete_shouldRejectNonExistentExpense() {
+    Account account = new Account(
+        "Savings account", AccountType.SAVINGS, new BigDecimal("500.00"));
+    Category category = new Category("Entertainment");
+
+    Expense expense = new Expense(
+        new BigDecimal("100.00"),
+        LocalDate.of(2026, 10, 14),
+        "Weekend fun",
+        category,
+        account);
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> repository.delete(expense));
   }
 }
