@@ -9,11 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.wherediditgo.domain.Account;
 import com.wherediditgo.domain.AccountType;
 
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class AccountRepositoryTest {
 
   private AccountRepository accountRepository;

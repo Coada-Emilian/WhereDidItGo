@@ -7,10 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.wherediditgo.domain.Category;
 
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class CategoryRepositoryTest {
 
   private CategoryRepository categoryRepository;

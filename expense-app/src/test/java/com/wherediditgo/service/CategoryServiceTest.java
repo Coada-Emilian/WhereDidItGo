@@ -7,11 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.wherediditgo.domain.Category;
 import com.wherediditgo.repository.CategoryRepository;
 
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class CategoryServiceTest {
   private CategoryService service;
   private CategoryRepository repository;
