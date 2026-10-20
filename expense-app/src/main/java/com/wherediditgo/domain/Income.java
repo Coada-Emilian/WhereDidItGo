@@ -53,6 +53,7 @@ public class Income {
     return account;
   }
 
+  // Constructor for creating a new Income with validation
   public Income(BigDecimal amount, LocalDate date, String description, IncomeSource incomeSource, Account account) {
     if (amount == null || amount.signum() <= 0) {
       throw new IllegalArgumentException("Income amount must be positive");
@@ -81,6 +82,7 @@ public class Income {
     this.account = account;
   }
 
+  // Method to assign an ID to the income with validation
   public void assignId(Long id) {
     if (this.id != null) {
       throw new IllegalStateException("Income already has an ID");

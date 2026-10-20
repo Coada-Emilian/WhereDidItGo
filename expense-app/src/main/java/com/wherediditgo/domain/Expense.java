@@ -53,6 +53,7 @@ public class Expense {
     return account;
   }
 
+  // Constructor for creating a new Expense with validation
   public Expense(BigDecimal amount, LocalDate date, String description, Category category, Account account) {
     if (amount == null || amount.signum() <= 0) {
       throw new IllegalArgumentException("Expense amount must be positive");
@@ -81,6 +82,7 @@ public class Expense {
     this.account = account;
   }
 
+  // Method to assign an ID to the expense with validation
   public void assignId(Long id) {
     if (this.id != null) {
       throw new IllegalStateException("Expense already has an ID");
